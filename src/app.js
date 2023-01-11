@@ -1,24 +1,25 @@
 const express = require('express'); // importar express
-const app = express();
-app.use(express.json());
 const db = require('./utils/database'); // importar db
-// Crear una instancia de express
-// localhost:8000
-const PORT = 8000;
-
-// Importamos initModels
-const initModels = require('./models/initModels');
+const initModels = require('./models/initModels'); // Importamos initModels
 const User = require('./models/user.models');
 const Todos = require('./models/todos.models')
+const userRoutes = require('./routes/user.routes'); // Importando routes
 
-// Probando la conexión a la db
-db.authenticate()
+const app = express();// Crear una instancia de express
+app.use(express.json());
+
+const PORT = 8000; // localhost:8000
+
+
+app.use( '/api/v1', userRoutes ); // primero esta ruta + la del route
+// app.use( '/', require('./routes/user.routes') ) // Se puede de este modo tambien
+
+
+db.authenticate() // Probando la conexión a la db
     .then( () => console.log('autenticación exitosa'))
     .catch( (err) => console.log(err));
 
-
-// Ejecutamos función initmodels
-initModels();
+initModels();// Ejecutamos función initmodels
 
 // Usamos el método sync
 // de Sequelize para realizar la sincronización 
